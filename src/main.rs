@@ -2,7 +2,7 @@ use std::env;
 use std::process;
 use rand::{Rng};
 
-fn calculate_pi(intervals: i64) -> f64 {
+fn calculate_pi_monte_carlo(intervals: i64) -> f64 {
     let mut current_interval: i64 = 0;
     let mut circle_points: f64 = 0.0;
     let mut square_points: f64 = 0.0;
@@ -23,6 +23,16 @@ fn calculate_pi(intervals: i64) -> f64 {
     return 4.0 * (circle_points / square_points);
 }
 
+fn parse_intervals_from_args(args: Vec<String>) -> Result<i64, String> {
+    if args.len() < 2 { return Err("Intervals argument is missing!".to_string()); }
+
+    match args[1].parse() {
+        Ok(intervals) if intervals <= 0 => Err("Intervals value should be possitive (> 0)!".to_string()),
+        Ok(intervals) => Ok(intervals),
+        Err(_) => Err("Intervals argument does not appear to be integer!".to_string())
+    }
+}
+
 fn main() {
     /*
         Required CLI arguments:
@@ -30,22 +40,7 @@ fn main() {
         1 - calculating intervals (i32)
     */
     let args: Vec<String> = env::args().collect();
-
-    if args.len() < 2 {
-        println!("Intervals argument is missing!");
-        process::exit(1);
-    }
-
-    let intervals: i64 = args[1].parse().unwrap_or_else(| _ | {
-        println!("Intervals argument does not appear to be integer!");
-        process::exit(1);
-    });
-
-    if intervals <= 0 {
-        println!("Intervals value should be possitive (> 0)!");
-        process::exit(1);
-    }
-
-    let pi_value = calculate_pi(intervals);
+    let intervals = parse_intervals_from_args(args).unwrap_or_else( |err| { println!("{}", err); process::exit(1); });
+    let pi_value = calculate_pi_monte_carlo(intervals);
     println!("{}", pi_value);
 }

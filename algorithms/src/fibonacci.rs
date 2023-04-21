@@ -1,8 +1,10 @@
 pub fn fibonacci_sequence(n: i32) -> Vec<i32> {
+    let mut sum = 1;
     let mut seq = vec![0, 1];
 
-    while seq[seq.len() - 1] + seq[seq.len() - 2] <= n {
-        seq.push(seq[seq.len() - 1] + seq[seq.len() - 2]);
+    while sum <= n {
+        seq.push(sum);
+        sum = seq[seq.len() - 1] + seq[seq.len() - 2];
     }
 
     seq

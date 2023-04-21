@@ -1,3 +1,3 @@
-# PI Rust
+# My Rust test chamber
 
-Estimating PI value using Monte Carlo in Rust
+This is the Rust workspace where I keep my Rust code snippets and test random ideas before implementing them in production. 
